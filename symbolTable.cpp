@@ -7,9 +7,21 @@ void symbolTable::addVariable(variable v) {
     variables[v.myName()] = v;
 }
 variable symbolTable::getVariable(string s) {
-    return variables[s];
+    if(isVariable(s)) {
+        return variables[s];
+    } else {
+        return variable();
+    }
 }
 
+void symbolTable::updateVariable(string s, double d) {
+    if(isVariable(s)) {
+        variables[s].setValue(d);
+    } else {
+        // no such variable error
+        return;
+    }
+}
 bool symbolTable::isVariable(string s){
     if(variables.find(s) != variables.end()) {
         return true;

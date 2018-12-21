@@ -82,7 +82,7 @@ void updateVals(int newsockfd, int timesPerSec, DataReaderServer* reader, symbol
             //cout << temp;
             str2 = reader->getStringFromXMlLocation(i);
             reader->setValue(temp, str2);
-            table->updateFromServer(str2, temp);
+            //table->updateFromServer(str2, temp);
             //vec.push_back(temp);
             i++;
         }

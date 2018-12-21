@@ -17,6 +17,7 @@
 #include "symbolTable.h"
 #define MICRO_SECOND 100000
 using namespace std;
+class symbolTable;
 class DataReaderServer {
 private:
     map<string, double> values;

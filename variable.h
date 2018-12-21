@@ -5,22 +5,36 @@
 #define ADVANCEDPROG_VARIABLE_H
 #include "expression.h"
 #include "symbolTable.h"
+#include "DataReaderServer.h"
 #include <string>
 class symbolTable;
+class DataReaderServer;
 using namespace std;
 class variable : public expression{
 public:
-    variable(symbolTable* t) {
+    variable(string name, symbolTable* t, DataReaderServer* s) {
+        this->name = name;
         this->table = t;
+        this->server = s;
         value = 0;
+        this->isServer = false;
+        this->isVar = false;
     }
-    variable(symbolTable* t, double d) {
+    variable(string name, symbolTable* t, DataReaderServer* s, double d) {
+        this->name = name;
         this->table = t;
         this->value = d;
+        this->server = s;
+        this->isServer = false;
+        this->isVar = false;
     }
     variable() {
+        this->name = "";
+        this->server = nullptr;
         this->table = nullptr;
         this->value = 0;
+        this->isServer = false;
+        this->isVar = false;
     }
     string myName() {
         return name;
@@ -36,15 +50,14 @@ public:
     bool isBindedVar() {
         return isVar;
     }
-    void setValue(double d) {
-        value = d;
-    }
+    void setValue(double d);
 private:
     bool isServer;
     bool isVar;
     string name;
     string bindTo;
     symbolTable* table;
+    DataReaderServer* server;
     double value;
 };
 #endif //ADVANCEDPROG_VARIABLE_H

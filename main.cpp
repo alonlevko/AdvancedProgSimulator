@@ -9,11 +9,11 @@ using namespace std;
 //extern DataReaderServer fromServer;
 int main() {
     Lexer lexer;
-    commandGiver giver;
     DataReaderServer reader;
     string input;
     vector<string> strings;
     symbolTable table;
+    commandGiver giver(&table);
     int outSocket;
     while(true) {
         getline(cin, input);
