@@ -7,6 +7,11 @@
 #include "createVarCommand.h"
 #include "setCommand.h"
 #include "printCommand.h"
+#include "ifCommand.h"
+#include "sleepCommand.h"
+#include "whileCommand.h"
+#include "runCommand.h"
+#include "entercCommand.h"
 commandGiver::commandGiver(){
     table = nullptr;
     this->makeCommands();
@@ -24,7 +29,7 @@ commandGiver::~commandGiver() {
 }
 Command* commandGiver::getCommand(string str) {
     if(table->isVariable(str)) {
-        variable temp = table->getVariable(str);
+        variable* temp = table->getVariable(str);
         if (commands.find(str) == commands.end()) { // we dont have set command on that vriable
             commands[str] = new setCommand(temp);
             return commands[str];
@@ -41,8 +46,14 @@ Command* commandGiver::getCommand(string str) {
 
 void commandGiver::makeCommands() {
     // create all commands we have and put them into the map
+    commands["run"] = new runCommand();
     commands["openDataServer"] = new openDataServer();
     commands["connect"] = new connectCommand();
     commands["var"] = new createVarCommand();
     commands["print"] = new printCommand();
+    commands["if"] = new ifCommand();
+    commands["sleep"] = new sleepCommand();
+    commands["while"] = new whileCommand();
+    commands["Enterc"] = new entercCommand();
+    commands["enterc"] = new entercCommand();
 }

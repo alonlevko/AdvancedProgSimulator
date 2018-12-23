@@ -8,14 +8,13 @@
 #include "command.h"
 class setCommand: public Command {
 private:
-    variable var;
+    variable* var;
 public:
-    setCommand(variable v) {
+    setCommand(variable* v) {
         this->var = v;
     }
     void doCommand(vector<string> strings, DataReaderServer* server,
-                   symbolTable* table, int* outSockId, commandGiver* giver);
-    vector<string> makeForParse(vector<string> vec);
+                   symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 
 

@@ -18,7 +18,7 @@ void variable::bind(string s) {
 
 double variable::calculate() {
         if(isVar) { // our variable is binded to another
-            value = (table->getVariable(bindTo)).calculate();
+            value = (table->getVariable(bindTo))->calculate();
         } else if(isServer) {
             value = server->getValue(bindTo);
         }

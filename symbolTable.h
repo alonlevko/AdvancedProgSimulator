@@ -15,7 +15,7 @@ private:
 
 public:
     void addVariable(variable v);
-    variable getVariable(string s);
+    variable* getVariable(string s);
     bool isVariable(string s);
     void updateFromServer(string bind, double number);
     void bindVariable(string name, string bindTo);

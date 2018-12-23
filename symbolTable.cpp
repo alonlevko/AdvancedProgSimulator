@@ -6,11 +6,11 @@
 void symbolTable::addVariable(variable v) {
     variables[v.myName()] = v;
 }
-variable symbolTable::getVariable(string s) {
+variable* symbolTable::getVariable(string s) {
     if(isVariable(s)) {
-        return variables[s];
+        return &(variables[s]);
     } else {
-        return variable();
+        return nullptr;
     }
 }
 
@@ -38,6 +38,6 @@ void symbolTable::updateFromServer(string bind, double number) {
     }
 }
 void symbolTable::bindVariable(string name, string bindTo) {
-    variable var = this->getVariable(name);
-    binded[bindTo] = var;
+    variable* var = this->getVariable(name);
+    binded[bindTo] = *var;
 }

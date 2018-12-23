@@ -57,6 +57,13 @@ void DataReaderServer::setValue(double d, string& s) {
 string DataReaderServer::getStringFromXMlLocation(int i) {
     return names[i];
 }
+bool DataReaderServer::isInList(string& s) {
+    if(values.find(s) == values.end()) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 void updateVals(int newsockfd, int timesPerSec, DataReaderServer* reader, symbolTable* table) {
     char buffer[300];

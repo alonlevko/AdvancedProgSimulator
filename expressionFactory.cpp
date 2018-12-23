@@ -10,7 +10,11 @@
 
 double expressionFactory::parse(vector<string> vec, symbolTable* table) {
     vec = removeUnaryMinus(vec);
-    list<string> tokens = shuntingYard(vec);
+    list<string> tokens = shuntingYard(vec, table);
+    return RPNCalc(tokens, table);
+}
+
+double expressionFactory::RPNCalc(list<string> tokens, symbolTable* table) {
     stack<double> temp;
     while(!tokens.empty()) {
         string first = tokens.front();
@@ -30,15 +34,14 @@ double expressionFactory::parse(vector<string> vec, symbolTable* table) {
         } else if (is_number(first)) {
             double num = stod(first);
             temp.push(num);
-        } else if (is_variable(first)) {
-            variable v = table->getVariable(first);
-            double num = v.calculate();
+        } else if (table->isVariable(first)) {
+            variable* v = table->getVariable(first);
+            double num = v->calculate();
             temp.push(num);
         }
     }
     return temp.top();
 }
-
 vector<string> expressionFactory::removeUnaryMinus(vector<string> vec) {
     vector<string> result;
     string prev = *(vec.begin());
@@ -49,7 +52,9 @@ vector<string> expressionFactory::removeUnaryMinus(vector<string> vec) {
     }
     string current;
     for(vector<string>::iterator it = (vec.begin() + 1); it != vec.end(); it++){
-        prev = current;
+        if(current.size() > 0) {
+            prev = current;
+        }
         current = (*it);
         if((prev != ")") && (is_operator(prev)) && (current.compare("-") == 0)) { // this is a unary minus
             result.push_back("$");
@@ -60,14 +65,14 @@ vector<string> expressionFactory::removeUnaryMinus(vector<string> vec) {
     return result;
 }
 
-list<string> expressionFactory::shuntingYard(vector<string> vec) {
+list<string> expressionFactory::shuntingYard(vector<string> vec, symbolTable* table) {
     list<string> output;
     stack<opertor> operators;
     // we will define unary negation as $
     for (vector<string>::iterator it = vec.begin(); it != vec.end(); it++) {
         if (is_number(*it)) {
             output.push_back(*it);
-        } else if (is_variable(*it)) {
+        } else if (table->isVariable(*it)) {
             output.push_back(*it);
         } else if ((*it).compare("(") == 0) {
             opertor ope;

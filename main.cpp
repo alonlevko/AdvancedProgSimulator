@@ -24,7 +24,7 @@ int main() {
         strings = lexer.lex(input);
         Command *command = giver.getCommand(strings[0]);
         strings.erase(strings.begin());
-        command->doCommand(strings, &reader, &table, &outSocket, &giver);
+        command->doCommand(strings, &reader, &table, &outSocket, &giver, cin);
         strings.clear();
         input.clear();
     }

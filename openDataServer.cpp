@@ -14,7 +14,7 @@
 #include "openDataServer.h"
 #include "DataReaderServer.h"
 void openDataServer::doCommand(vector <string> strings, DataReaderServer* server,
-        symbolTable* table, int* outSockId, commandGiver* giver) {
+        symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if(strings.size() != 2) {
         // no good arguments error
         return;

@@ -4,11 +4,11 @@
 
 #include "printCommand.h"
 void printCommand::doCommand(vector<string> strings, DataReaderServer* server,
-               symbolTable* table, int* outSockId, commandGiver* giver) {
+               symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if (strings.size() == 1) {
         if(table->isVariable(strings[0])) {
-            variable v = table->getVariable(strings[0]);
-            cout << v.calculate() << endl;
+            variable* v = table->getVariable(strings[0]);
+            cout << v->calculate() << endl;
         } else {
             cout << strings[0].substr(1, strings[0].length() - 2) << endl;
         }

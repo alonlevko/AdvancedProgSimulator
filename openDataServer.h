@@ -10,6 +10,6 @@ using namespace std;
 class openDataServer: public Command {
 public:
     void doCommand(vector<string> strings, DataReaderServer* reader,
-            symbolTable* table, int* outSockId, commandGiver* giver);
+            symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 #endif //ADVANCEDPROG_OPENDATASERVER_H

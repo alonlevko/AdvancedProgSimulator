@@ -5,7 +5,7 @@
 #include <thread>
 #include "sleepCommand.h"
 void sleepCommand::doCommand(vector<string> strings, DataReaderServer* server,
-               symbolTable* table, int* outSockId, commandGiver* giver) {
+               symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if(strings.size() != 1) {
         //error in number of parameters
         return;

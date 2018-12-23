@@ -27,6 +27,7 @@ public:
     double getValue(string& s);
     void setValue(double d, string& s);
     string getStringFromXMlLocation(int i);
+    bool isInList(string& s);
 };
 void updateVals(int newsockfd, int timesPerSecond, DataReaderServer* reader,
         symbolTable* table);

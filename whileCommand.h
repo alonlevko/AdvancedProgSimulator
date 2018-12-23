@@ -1,15 +1,15 @@
 //
-// Created by alon on 12/21/18.
+// Created by alon on 12/22/18.
 //
 
-#ifndef ADVANCEDPROG_SLEEPCOMMAND_H
-#define ADVANCEDPROG_SLEEPCOMMAND_H
+#ifndef ADVANCEDPROG_WHILECOMMAND_H
+#define ADVANCEDPROG_WHILECOMMAND_H
 
 #include "command.h"
-class sleepCommand: public Command{
+class whileCommand: public Command {
     void doCommand(vector<string> strings, DataReaderServer* server,
                            symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 
 
-#endif //ADVANCEDPROG_SLEEPCOMMAND_H
+#endif //ADVANCEDPROG_WHILECOMMAND_H

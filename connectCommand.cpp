@@ -15,7 +15,7 @@
 int outSockedId;
 using namespace std;
 void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
-        symbolTable* table, int* outSockId, commandGiver* giver) {
+        symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;

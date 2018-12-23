@@ -11,12 +11,22 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include "utils.h"
 bool isOperator(char c);
 void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
-               symbolTable* table, int* outSockId, commandGiver* giver) {
-    if(strings[0]=="bind") { // we have a bind command
-        string str = strings[1].substr(1, strings[0].length() - 2);
-        var.bind(str);
+               symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
+    if((strings.size() > 2) && (strings[2]=="bind")) { // we have a bind command
+        if(table->isVariable(strings[3])) {
+            var->bind(strings[3]);
+        } else {
+            string str = strings[3].substr(1, strings[3].length() - 2);
+            if (server->isInList(str)) {
+                var->bind(str);
+            } else {
+                //throw bad bind error
+                return;
+            }
+        }
     } else { // we have just to calculate an expression
         vector<string> temp = makeForParse(strings);
         if(temp[0] == "=") {
@@ -24,11 +34,12 @@ void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
         }
         expressionFactory fact;
         double exp = fact.parse(temp, table);
-        if(var.isBindedServer()) {
+        table->updateVariable(var->myName(), exp);
+        if(var->isBindedServer()) {
             string toWrite = "set ";
-            toWrite += var.boundTo();
+            toWrite += var->boundTo();
             toWrite += " ";
-            toWrite += to_string(var.calculate());
+            toWrite += to_string(exp);
             toWrite += "\r\n";
             char buffer[200];
             strcpy(buffer, toWrite.c_str());
@@ -36,66 +47,9 @@ void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
             if(n <= 0) {
                 cout << "error writing to socket" << endl;
             }
-        } else if (var.isBindedVar()) {
-            table->updateVariable(var.boundTo(), exp);
+        } else if (var->isBindedVar()) {
+            table->updateVariable(var->boundTo(), exp);
         }
-        table->updateVariable(var.myName(), exp);
-    }
-}
-// take expression inside vec and turn them to easy parse (2+3-->2 + 3
-vector<string> setCommand::makeForParse(vector<string> vec) {
-    vector<string> temp;
-    for(vector<string>::iterator it = vec.begin(); it != vec.end(); it++) {
-        string str = *it;
-        string until;
-        if(str == "") {
-            continue;
-        }
-        if(str.size() == 1) {
-            temp.push_back(str);
-            continue;
-        }
-        for(string::iterator itr = str.begin(); itr != str.end(); itr++) {
-            if (isOperator(*itr)) {
-                if(until.size() > 0) {
-                    temp.push_back(until);
-                    until.clear();
-                }
-                string x;
-                x.push_back(*itr);
-                temp.push_back(x);
-            } else {
-                until.push_back(*itr);
-            }
-        }
-        if(until.size() > 0) {
-            temp.push_back(until);
-            until.clear();
-        }
-    }
-    return temp;
-}
-/*
- *
- * 5+3
- *
- */
-bool isOperator(char c) {
-    if (c == '+') {
-        return true;
-    } else if (c == '-') {
-        return true;
-    } else if (c == '/') {
-        return true;
-    } else if (c == '*') {
-        return true;
-    } else if (c == '=') {
-        return true;
-    } else if (c == '(') {
-        return true;
-    } else if (c == ')') {
-        return true;
-    } else {
-        return false;
+
     }
 }

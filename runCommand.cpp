@@ -9,7 +9,7 @@
 #include "commandGiver.h"
 using namespace std;
 void runCommand::doCommand(vector<string> strings, DataReaderServer *reader,
-                           symbolTable* table, int* outSockId, commandGiver* giver) {
+                           symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if(strings.size() != 1) {
         // exception - the only parameter is the file name
         return;
@@ -20,10 +20,10 @@ void runCommand::doCommand(vector<string> strings, DataReaderServer *reader,
         string input;
         vector<string> strtemp;
         while (getline(ifs, input)) {
-            strings = lexer.lex(input);
+            strtemp = lexer.lex(input);
             Command *command = giver->getCommand(strtemp[0]);
-            strings.erase(strtemp.begin());
-            command->doCommand(strtemp, reader, table, outSockId, giver);
+            strtemp.erase(strtemp.begin());
+            command->doCommand(strtemp, reader, table, outSockId, giver, ifs);
             strtemp.clear();
             input.clear();
         }
