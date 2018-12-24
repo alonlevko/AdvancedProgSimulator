@@ -1,6 +1,3 @@
-//
-// Created by alon on 12/16/18.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
@@ -13,12 +10,15 @@
 #include <iostream>
 #include "openDataServer.h"
 #include "DataReaderServer.h"
+// open a data servet and then call a thread to run it.
 void openDataServer::doCommand(vector <string> strings, DataReaderServer* server,
         symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
+    // make sure we have 2 arguments only
     if(strings.size() != 2) {
         // no good arguments error
         return;
     }
+    // the generic code to open a sever.
     int sockfd, newsockfd, portno, clilen;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
@@ -60,7 +60,9 @@ void openDataServer::doCommand(vector <string> strings, DataReaderServer* server
         perror("ERROR on accept");
         exit(1);
     }
+    // create a new thread that will update the values from the simulator
     thread t1(updateVals, newsockfd, wait, server, table);
+    // let it run seperatly from the main code.
     t1.detach();
 }
 

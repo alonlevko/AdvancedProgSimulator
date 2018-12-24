@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/21/18.
-//
-
 #ifndef ADVANCEDPROG_PRINTCOMMAND_H
 #define ADVANCEDPROG_PRINTCOMMAND_H
 

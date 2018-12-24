@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/18/18.
-//
-
 #include "connectCommand.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +8,11 @@
 #include <netinet/in.h>
 
 #include <string.h>
-int outSockedId;
 using namespace std;
+// this command connects us as a client to the simulator and sets the socketid
 void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
         symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
+    // the general client code
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -34,6 +31,7 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
         exit(1);
     }
 
+    // get the host
     server = gethostbyname(strings[0].c_str());
 
     if (server == NULL) {
@@ -53,16 +51,6 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
         perror("ERROR connecting");
         exit(1);
     }
+    // set the socket to be the correct socket number/
     *(outSockId) = sockfd;
-    /* Send message to the server */
-
-    n = write(sockfd, buffer, strlen(buffer));
-    if (n <= 0) {
-        perror("ERROR writing to socket");
-        exit(1);
-    }
-
-    /* Now ask for a message from the user, this message
-       * will be read by server
-    */
 }

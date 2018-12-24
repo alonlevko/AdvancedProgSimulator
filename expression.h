@@ -1,9 +1,6 @@
-//
-// Created by alon on 12/18/18.
-//
-
 #ifndef ADVANCEDPROG_EXPRESSION_H
 #define ADVANCEDPROG_EXPRESSION_H
+// we need to be able to calculate all exprressions.
 class expression {
 public:
     virtual double calculate() = 0;

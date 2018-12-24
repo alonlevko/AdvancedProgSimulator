@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/21/18.
-//
-
 #ifndef ADVANCEDPROG_SLEEPCOMMAND_H
 #define ADVANCEDPROG_SLEEPCOMMAND_H
 

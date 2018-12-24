@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/20/18.
-//
-
 #ifndef ADVANCEDPROG_SETCOMMAND_H
 #define ADVANCEDPROG_SETCOMMAND_H
 

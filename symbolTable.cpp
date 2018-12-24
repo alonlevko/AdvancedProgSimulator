@@ -1,11 +1,9 @@
-//
-// Created by alon on 12/18/18.
-//
-
 #include "symbolTable.h"
+// add a variable to the table by copy
 void symbolTable::addVariable(variable v) {
     variables[v.myName()] = v;
 }
+// get a pointer to a variable that is in the table
 variable* symbolTable::getVariable(string s) {
     if(isVariable(s)) {
         return &(variables[s]);
@@ -13,7 +11,7 @@ variable* symbolTable::getVariable(string s) {
         return nullptr;
     }
 }
-
+// update the value of a variable that is in the table
 void symbolTable::updateVariable(string s, double d) {
     if(isVariable(s)) {
         variables[s].setValue(d);
@@ -22,6 +20,7 @@ void symbolTable::updateVariable(string s, double d) {
         return;
     }
 }
+// check if a string is a name of a variable in the table
 bool symbolTable::isVariable(string s){
     if(variables.find(s) != variables.end()) {
         return true;
@@ -29,14 +28,7 @@ bool symbolTable::isVariable(string s){
         return false;
     }
 }
-
-void symbolTable::updateFromServer(string bind, double number) {
-    if(binded.find(bind) != binded.end()) {
-        (binded[bind]).setValue(number);
-    } else {
-        return;
-    }
-}
+// bind a variable to a strings that is inputed.
 void symbolTable::bindVariable(string name, string bindTo) {
     variable* var = this->getVariable(name);
     binded[bindTo] = *var;

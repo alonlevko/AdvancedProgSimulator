@@ -1,6 +1,3 @@
-//
-// Created by alon on 12/16/18.
-//
 #ifndef ADVANCEDPROG_OPENDATASERVER_H
 #define ADVANCEDPROG_OPENDATASERVER_H
 #include <vector>

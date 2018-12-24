@@ -10,10 +10,12 @@
 #include "command.h"
 class ifCommand : public Command{
 public:
+    // if we are created in a while loop we need to know
     ifCommand(bool inWhile) {
         this->inWhile = inWhile;
         skip = false;
     }
+    // not in a while loop
     ifCommand(){
         this->inWhile = false;
         skip = false;

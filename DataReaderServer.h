@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/16/18.
-//
-
 #ifndef ADVANCEDPROG_SIMULATORVALUES_H
 #define ADVANCEDPROG_SIMULATORVALUES_H
 #include <map>
@@ -15,7 +11,6 @@
 #include <vector>
 #include <thread>
 #include "symbolTable.h"
-#define MICRO_SECOND 100000
 using namespace std;
 class symbolTable;
 class DataReaderServer {

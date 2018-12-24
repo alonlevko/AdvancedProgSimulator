@@ -1,13 +1,10 @@
-//
-// Created by alon on 12/16/18.
-//
-
 #ifndef ADVANCEDPROG_COMMANDGIVER_H
 #define ADVANCEDPROG_COMMANDGIVER_H
 #include "command.h"
 #include "symbolTable.h"
 #include <map>
 class Command;
+// gives pointers to commands so anybody can run them.
 class commandGiver {
 private:
     symbolTable* table;

@@ -1,6 +1,3 @@
-//
-// Created by alon on 12/16/18.
-//
 #ifndef ADVANCEDPROG_RUNCOMMAND_H
 #define ADVANCEDPROG_RUNCOMMAND_H
 #include "command.h"

@@ -1,6 +1,3 @@
-//
-// Created by alon on 12/18/18.
-//
 #include "DataReaderServer.h"
 #include <map>
 #include <string>
@@ -10,8 +7,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <vector>
-#define MICRO_SECOND 100000
-DataReaderServer fromServer;
 DataReaderServer::DataReaderServer() {
     // map all of the strings of variables to numbers
     names[1] = "/instrumentation/airspeed-indicator/indicated-speed-kt";
@@ -37,26 +32,29 @@ DataReaderServer::DataReaderServer() {
     names[21] = "/controls/flight/flaps";
     names[22] = "/controls/engines/engine/throttle";
     names[23] = "/engines/engine/rpm";
+    // initialize the values map with the string names.
     for(int i = 1; i <= 23; i++) {
         values[names[i]] = 0;
     }
 }
+// get a value from the map only if the strings is correct
 double DataReaderServer::getValue(string& s) {
-    if(values.find(s) != values.end()) {
+    if(values.find(s) != values.end()) { // make sure the strings is in
         return values[s];
     } else{
         //throw value not in simulator error
         return 0;
     }
 }
+// set a new value for a string in the server
 void DataReaderServer::setValue(double d, string& s) {
-    //cout << d << endl;
     values[s] = d;
-    //cout << "set " << s << " as: " << d <<endl;
 }
+// get a strings from the number of position in the xml
 string DataReaderServer::getStringFromXMlLocation(int i) {
     return names[i];
 }
+// check if a string is in out list of strings/
 bool DataReaderServer::isInList(string& s) {
     if(values.find(s) == values.end()) {
         return false;
@@ -64,36 +62,34 @@ bool DataReaderServer::isInList(string& s) {
         return true;
     }
 }
-
+// static method that will run in a diffrent thread and update the values in the server reader.
 void updateVals(int newsockfd, int timesPerSec, DataReaderServer* reader, symbolTable* table) {
-    char buffer[300];
-    bzero(buffer, 300);
+    char buffer[400];
+    bzero(buffer, 400);
     int n;
-    while(true) {
-        n = read(newsockfd, buffer, 300);
+    while(true) { // keep running while we have a connection.
+        // read values into the buffer
+        n = read(newsockfd, buffer, 400);
         if (n <= 0) {
             // error reading from socket
-            exit(1);
+            break;
         }
-        //cout << buffer;
+        // create a string stream from the buffer
         istringstream strm(buffer);
-        //string line;
-        //vector<double> vec;
         double temp;
         string str;
         string str2;
         int i = 1;
-        //for(int i = 0; i < 23; i++) {
+        // get a line from the stream, the delimiter is ,
         while(getline(strm, str, ',')) {
+            // save out number
             temp = stod(str);
-            //cout << temp;
+            // get the right strings for the positions
             str2 = reader->getStringFromXMlLocation(i);
+            // update the value.
             reader->setValue(temp, str2);
-            //table->updateFromServer(str2, temp);
-            //vec.push_back(temp);
             i++;
         }
-        //strm.clear();
-        //usleep(MICRO_SECOND/timesPerSecond);
     }
+    close(newsockfd);
 }

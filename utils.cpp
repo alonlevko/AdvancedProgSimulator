@@ -1,21 +1,21 @@
-//
-// Created by alon on 12/21/18.
-//
-
 #include "utils.h"
+// make a file ready from parsing by spliting it up into tokens
 vector<string> makeForParse(vector<string> vec) {
     vector<string> temp;
+    //iterate over the strings an seperate them
     for(vector<string>::iterator it = vec.begin(); it != vec.end(); it++) {
         string str = *it;
         string until;
-        if(str == "") {
+        if(str == "") { // if the string is nothing we dont need it
             continue;
         }
-        if(str.size() == 1) {
+        if(str.size() == 1) { // if its just 1 char we can't seperate it
             temp.push_back(str);
             continue;
         }
+        // iterate over each char in the string
         for(string::iterator itr = str.begin(); itr != str.end(); itr++) {
+            // if the char is an operator we split here
             if (isOperator(*itr)) {
                 if(until.size() > 0) {
                     temp.push_back(until);
@@ -24,18 +24,18 @@ vector<string> makeForParse(vector<string> vec) {
                 string x;
                 x.push_back(*itr);
                 temp.push_back(x);
-            } else {
+            } else { // if we dont have a operetor push it
                 until.push_back(*itr);
             }
         }
-        if(until.size() > 0) {
+        if(until.size() > 0) { // if we have somthing push in into the output
             temp.push_back(until);
             until.clear();
         }
     }
     return temp;
 }
-
+// check if the char is an operator
 bool isOperator(char c) {
     if (c == '+') {
         return true;
@@ -55,15 +55,7 @@ bool isOperator(char c) {
         return false;
     }
 }
-
-vector<string> removeLeftBracet(vector<string> vec) {
-    if((vec.back().back()) == '{') {
-        vec.back().erase(vec.back().end() - 1);
-    } else {
-        // throw not left bracet error
-    }
-}
-
+// check if the char is a comparator
 bool isComparator(char c) {
     if (c == '=') {
         return true;

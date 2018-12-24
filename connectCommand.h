@@ -1,7 +1,3 @@
-//
-// Created by alon on 12/18/18.
-//
-
 #ifndef ADVANCEDPROG_CONNECTCOMMAND_H
 #define ADVANCEDPROG_CONNECTCOMMAND_H
 #include "command.h"
