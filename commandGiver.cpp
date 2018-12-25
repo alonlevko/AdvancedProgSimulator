@@ -9,6 +9,7 @@
 #include "whileCommand.h"
 #include "runCommand.h"
 #include "entercCommand.h"
+#include "exitCommand.h"
 // initialize an empty command giver
 commandGiver::commandGiver(){
     table = nullptr;
@@ -60,4 +61,5 @@ void commandGiver::makeCommands() {
     commands["while"] = new whileCommand();
     commands["Enterc"] = new entercCommand();
     commands["enterc"] = new entercCommand();
+    commands["exit"] = new exitCommand();
 }

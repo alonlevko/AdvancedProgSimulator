@@ -11,25 +11,23 @@
 #include "openDataServer.h"
 #include "DataReaderServer.h"
 // open a data servet and then call a thread to run it.
-void openDataServer::doCommand(vector <string> strings, DataReaderServer* server,
+bool openDataServer::doCommand(vector <string> strings, DataReaderServer* server,
         symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     // make sure we have 2 arguments only
     if(strings.size() != 2) {
         // no good arguments error
-        return;
+        return false;
     }
     // the generic code to open a sever.
     int sockfd, newsockfd, portno, clilen;
-    char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
-    int  n;
 
     /* First call to socket() function */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0) {
         perror("ERROR opening socket");
-        exit(1);
+        return false;
     }
 
     /* Initialize socket structure */
@@ -43,7 +41,7 @@ void openDataServer::doCommand(vector <string> strings, DataReaderServer* server
     /* Now bind the host address using bind() call.*/
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         perror("ERROR on binding");
-        exit(1);
+        return false;
     }
 
     /* Now start listening for the clients, here process will
@@ -58,12 +56,23 @@ void openDataServer::doCommand(vector <string> strings, DataReaderServer* server
     //printf("connection made");
     if (newsockfd < 0) {
         perror("ERROR on accept");
-        exit(1);
+        return false;
+    }
+    char buffer[400];
+    bzero(buffer, 400);
+    int n;
+    while(true) {
+        n = read(newsockfd, buffer, 400);
+        if (n > 0) {
+            //the connection has been made and we can continue
+            break;
+        }
     }
     // create a new thread that will update the values from the simulator
     thread t1(updateVals, newsockfd, wait, server, table);
     // let it run seperatly from the main code.
     t1.detach();
+    return true;
 }
 
 

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <iostream>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <vector>
@@ -30,7 +32,7 @@ DataReaderServer::DataReaderServer() {
     names[19] = "/controls/flight/elevator";
     names[20] = "/controls/flight/rudder";
     names[21] = "/controls/flight/flaps";
-    names[22] = "/controls/engines/engine/throttle";
+    names[22] = "/controls/engines/current-engine/throttle";
     names[23] = "/engines/engine/rpm";
     // initialize the values map with the string names.
     for(int i = 1; i <= 23; i++) {
@@ -64,12 +66,12 @@ bool DataReaderServer::isInList(string& s) {
 }
 // static method that will run in a diffrent thread and update the values in the server reader.
 void updateVals(int newsockfd, int timesPerSec, DataReaderServer* reader, symbolTable* table) {
-    char buffer[400];
-    bzero(buffer, 400);
+    char buffer[1000];
+    bzero(buffer, 1000);
     int n;
     while(true) { // keep running while we have a connection.
         // read values into the buffer
-        n = read(newsockfd, buffer, 400);
+        n = read(newsockfd, buffer, 1000);
         if (n <= 0) {
             // error reading from socket
             break;
@@ -79,17 +81,26 @@ void updateVals(int newsockfd, int timesPerSec, DataReaderServer* reader, symbol
         double temp;
         string str;
         string str2;
-        int i = 1;
+        int i;
         // get a line from the stream, the delimiter is ,
-        while(getline(strm, str, ',')) {
-            // save out number
-            temp = stod(str);
-            // get the right strings for the positions
-            str2 = reader->getStringFromXMlLocation(i);
-            // update the value.
-            reader->setValue(temp, str2);
-            i++;
+        while(getline(strm, str)) {
+            istringstream strm2(str);
+            i = 1;
+            while (getline(strm2, str, ',')) {
+                // save out number
+                temp = strtod(str.c_str(), nullptr);
+                // get the right strings for the positions
+                str2 = reader->getStringFromXMlLocation(i);
+                // update the value.
+                reader->setValue(temp, str2);
+                i++;
+                //bzero(buffer);
+            }
+            strm.clear();
         }
+        double t = timesPerSec / 10;
+        int wait = t*1000;
+        std::this_thread::sleep_for(std::chrono::milliseconds(wait));
     }
     close(newsockfd);
 }

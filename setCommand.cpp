@@ -5,11 +5,10 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <sys/socket.h>
-#include <unistd.h>
 #include <netinet/in.h>
 #include "utils.h"
 // set a variable value based on an input string
-void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
+bool setCommand::doCommand(vector<string> strings, DataReaderServer* server,
                symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if((strings.size() > 2) && (strings[2]=="bind")) { // we have a bind command
         if(table->isVariable(strings[3])) {
@@ -21,7 +20,7 @@ void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
             } else {
                 var->setOnlyBind(str);
                 //throw bad bind error
-                return;
+                return true;
             }
         }
     } else { // we have just to calculate an expression
@@ -45,6 +44,7 @@ void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
             strcpy(buffer, toWrite.c_str());
             // send the command to the simulator
             int n = write(*outSockId, buffer, strlen(buffer));
+            fsync(*outSockId);
             if(n <= 0) { // if we had a bad read
                 cout << "error writing to socket" << endl;
             }
@@ -60,10 +60,12 @@ void setCommand::doCommand(vector<string> strings, DataReaderServer* server,
             strcpy(buffer, toWrite.c_str());
             // send the command to the simulator
             int n = write(*outSockId, buffer, strlen(buffer));
+            fsync(*outSockId);
             if(n <= 0) { // if we had a bad read
                 cout << "error writing to socket" << endl;
             }
         }
 
     }
+    return true;
 }

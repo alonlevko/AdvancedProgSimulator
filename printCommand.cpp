@@ -1,6 +1,6 @@
 #include "printCommand.h"
 // print to the cmd based on the input we got
-void printCommand::doCommand(vector<string> strings, DataReaderServer* server,
+bool printCommand::doCommand(vector<string> strings, DataReaderServer* server,
                symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if (strings.size() == 1) { // if we have only 1 input we have a variable
         if(table->isVariable(strings[0])) { // make sure it is a variable/
@@ -22,4 +22,5 @@ void printCommand::doCommand(vector<string> strings, DataReaderServer* server,
     } else { // print that we had an error
         cout << "error" << endl;
     }
+    return true;
 }

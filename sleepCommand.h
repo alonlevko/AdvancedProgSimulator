@@ -3,7 +3,7 @@
 
 #include "command.h"
 class sleepCommand: public Command{
-    void doCommand(vector<string> strings, DataReaderServer* server,
+    bool doCommand(vector<string> strings, DataReaderServer* server,
                            symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 

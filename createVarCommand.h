@@ -6,7 +6,7 @@
 #include "symbolTable.h"
 class createVarCommand : public Command {
 public:
-    void doCommand(vector<string> strings, DataReaderServer* server,
+    bool doCommand(vector<string> strings, DataReaderServer* server,
                    symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 #endif //ADVANCEDPROG_CREATEVARCOMMAND_H

@@ -14,7 +14,8 @@ using namespace std;
 class Command {
 public:
     // the functions to run the command.
-    virtual void doCommand(vector<string> strings, DataReaderServer* server,
+    // returns false if we need to exit the program
+    virtual bool doCommand(vector<string> strings, DataReaderServer* server,
             symbolTable* table, int* outSockId, commandGiver* giver, istream& in) = 0;
 };
 #endif //ADVANCEDPROG_COMMAND_H

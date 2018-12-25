@@ -10,7 +10,7 @@
 #include <string.h>
 using namespace std;
 // this command connects us as a client to the simulator and sets the socketid
-void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
+bool connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
         symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     // the general client code
     int sockfd, portno, n;
@@ -19,7 +19,7 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
     char buffer[] = "i am the king";
     if (strings.size() != 2) {
         // bad arguments error
-        exit(0);
+        return false;
     }
     portno = stoi(strings[1]);
 
@@ -28,7 +28,7 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
 
     if (sockfd < 0) {
         perror("ERROR opening socket");
-        exit(1);
+        return false;
     }
 
     // get the host
@@ -36,7 +36,7 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
 
     if (server == NULL) {
         fprintf(stderr, "ERROR, no such host\n");
-        exit(0);
+        return false;
     }
 
     bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -49,7 +49,7 @@ void connectCommand::doCommand(vector<string> strings, DataReaderServer* reader,
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) <
         0) {
         perror("ERROR connecting");
-        exit(1);
+        return false;
     }
     // set the socket to be the correct socket number/
     *(outSockId) = sockfd;

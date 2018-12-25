@@ -20,7 +20,7 @@ public:
         this->inWhile = false;
         skip = false;
     }
-    void doCommand(vector<string> strings, DataReaderServer* server,
+    bool doCommand(vector<string> strings, DataReaderServer* server,
                    symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
     bool checkStatment(symbolTable* table);
     bool hasEnd(string& s);

@@ -3,7 +3,7 @@
 #include "expressionFactory.h"
 #include "lexer.h"
 // do the if command, get the commands input and then run them if the statment is correct
-void ifCommand::doCommand(vector<string> strings, DataReaderServer* server,
+bool ifCommand::doCommand(vector<string> strings, DataReaderServer* server,
                symbolTable* table, int* outSockId, commandGiver* giver,istream& in) {
     // comparators with double tokens are in two elements
     if(!skip) { // if we have been commanded by our creator to skip the invokation
@@ -75,13 +75,17 @@ void ifCommand::doCommand(vector<string> strings, DataReaderServer* server,
         }
     }
     // check if the statment stands, if it does excecute it.
+    bool exitFlag = true;
     if(checkStatment(table)) {
         list<vector<string>>::iterator iterator1 = aruments.begin();
         list<Command*>::iterator iterator2 = toExcecute.begin();
         // iterate both over commands and arguments and doCommand.
         while(iterator1 != aruments.end() && iterator2 != toExcecute.end()) {
-            (*iterator2)->doCommand(*iterator1, server, table, outSockId, giver,
+            exitFlag = (*iterator2)->doCommand(*iterator1, server, table, outSockId, giver,
                     in);
+            if(!exitFlag) {
+                return exitFlag;
+            }
             ++iterator1;
             ++iterator2;
         }
@@ -94,6 +98,7 @@ void ifCommand::doCommand(vector<string> strings, DataReaderServer* server,
         rpnRight.clear();
         comparator.clear();
     }
+    return true;
 }
 // use the string comparator and the table to calculate the value of expression and check statments.
 bool ifCommand::checkStatment(symbolTable* table) {

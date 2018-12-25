@@ -6,11 +6,11 @@
 #include "commandGiver.h"
 using namespace std;
 // run commands from a file
-void runCommand::doCommand(vector<string> strings, DataReaderServer *reader,
+bool runCommand::doCommand(vector<string> strings, DataReaderServer *reader,
                            symbolTable* table, int* outSockId, commandGiver* giver, istream& in) {
     if(strings.size() != 1) {
         // exception - the only parameter is the file name
-        return;
+        return true;
     }
     // create a stream based on the file that was inputed
     ifstream ifs(strings[0], ifstream::in);
@@ -18,17 +18,19 @@ void runCommand::doCommand(vector<string> strings, DataReaderServer *reader,
         Lexer lexer;
         string input;
         vector<string> strtemp;
+        bool exit = true;
         // get a line from the file
-        while (getline(ifs, input)) {
+        while (getline(ifs, input) && exit) {
             // run the command that was in the file
             strtemp = lexer.lex(input);
             Command *command = giver->getCommand(strtemp[0]);
             strtemp.erase(strtemp.begin());
             // the next commands will need to read also from this file
-            command->doCommand(strtemp, reader, table, outSockId, giver, ifs);
+            exit = command->doCommand(strtemp, reader, table, outSockId, giver, ifs);
             strtemp.clear();
             input.clear();
         }
     }
     ifs.close();
+    return exit;
 }

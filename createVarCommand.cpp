@@ -5,7 +5,7 @@
 #include "createVarCommand.h"
 // create a new variable and put is into the symbol table.
 // if this is a complex creation call the set command.
-void createVarCommand::doCommand(vector<string> strings, DataReaderServer* server,
+bool createVarCommand::doCommand(vector<string> strings, DataReaderServer* server,
                symbolTable* table, int* outSockId, commandGiver* giver, istream& in){
     string name;
     // go over each char in the first string and save it to the name untill the =
@@ -26,4 +26,5 @@ void createVarCommand::doCommand(vector<string> strings, DataReaderServer* serve
         Command* c = giver->getCommand(name);// call a variable set command
         c->doCommand(strings, server, table, outSockId, giver, in);
     }
+    return true;
 }

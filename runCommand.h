@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 class runCommand: public Command {
-    void doCommand(vector<string> strings, DataReaderServer* reader,
+    bool doCommand(vector<string> strings, DataReaderServer* reader,
                    symbolTable* table, int* outSockId, commandGiver* giver, istream& in);
 };
 #endif //ADVANCEDPROG_RUNCOMMAND_H
